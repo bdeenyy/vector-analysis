@@ -1,19 +1,21 @@
 from PyQt6.QtWidgets import QFileDialog, QMessageBox
 import pandas as pd
-from src import VectorData
+from src.models.vector_data import VectorData
 
 
 class ExcelHandler:
     @staticmethod
     def load_from_excel():
         """
-        Открывает диалог выбора Excel файла и загружает данные
+        Opens a file dialog for Excel file selection and loads vector data.
+        Takes first 4 columns starting from second row.
 
         Returns:
-            list: Список объектов VectorData
+            list: List of VectorData objects containing the loaded data.
+                 Returns empty list if loading fails or user cancels.
         """
         try:
-            # Открываем диалог выбора файла
+            # Open file dialog
             file_name, _ = QFileDialog.getOpenFileName(
                 None,
                 "Выберите Excel файл",
@@ -21,51 +23,46 @@ class ExcelHandler:
                 "Excel Files (*.xlsx *.xls)"
             )
 
-            if not file_name:  # Если пользователь отменил выбор
+            if not file_name:
                 return []
 
-            # Читаем Excel файл
-            df = pd.read_excel(file_name)
+            # Read Excel file, skip first row
+            df = pd.read_excel(file_name, skiprows=1)
 
+            # Process data
             vector_data_list = []
-
-            # Перебираем строки данных
             for index, row in df.iterrows():
                 try:
-                    # Берём первые 4 столбца
+                    # Take only first 4 columns
                     values = row.values[:4]
                     if len(values) < 4:
                         continue
 
-                    name = str(values[0])
-                    # Преобразуем значения в float, заменяя ошибочные на 0
-                    try:
-                        length1 = float(values[1])
-                    except (ValueError, TypeError):
-                        length1 = 0.0
-
-                    try:
-                        length2 = float(values[2])
-                    except (ValueError, TypeError):
-                        length2 = 0.0
-
-                    try:
-                        length3 = float(values[3])
-                    except (ValueError, TypeError):
-                        length3 = 0.0
-
-                    vector_data = VectorData(name, length1, length2, length3)
+                    vector_data = VectorData(
+                        name=str(values[0]),
+                        length1=ExcelHandler._safe_float_convert(values[1]),
+                        length2=ExcelHandler._safe_float_convert(values[2]),
+                        length3=ExcelHandler._safe_float_convert(values[3])
+                    )
                     vector_data_list.append(vector_data)
 
                 except Exception as e:
-                    print(f"Ошибка в строке {index + 1}: {str(e)}")
+                    print(f"Error in row {index + 2}: {str(e)}")
                     continue
 
             if not vector_data_list:
-                QMessageBox.warning(None, "Предупреждение", "Не удалось загрузить данные из файла")
+                QMessageBox.warning(
+                    None,
+                    "Предупреждение",
+                    "Не удалось загрузить данные из файла"
+                )
                 return []
 
             return vector_data_list
+
+        except pd.errors.EmptyDataError:
+            QMessageBox.critical(None, "Ошибка", "Excel файл пуст")
+            return []
 
         except Exception as e:
             QMessageBox.critical(None, "Ошибка", f"Ошибка при загрузке файла: {str(e)}")
@@ -74,11 +71,11 @@ class ExcelHandler:
     @staticmethod
     def save_to_excel(vector_data_list, file_path):
         """
-        Сохраняет данные в Excel файл
+        Saves vector data to an Excel file.
 
         Args:
-            vector_data_list (list): Список объектов VectorData
-            file_path (str): Путь для сохранения файла
+            vector_data_list (list): List of VectorData objects to save
+            file_path (str): Path where to save the Excel file
         """
         try:
             data = []
@@ -94,4 +91,25 @@ class ExcelHandler:
             df.to_excel(file_path, index=False)
 
         except Exception as e:
-            QMessageBox.critical(None, "Ошибка", f"Ошибка при сохранении файла: {str(e)}")
+            QMessageBox.critical(
+                None,
+                "Ошибка",
+                f"Ошибка при сохранении файла: {str(e)}"
+            )
+
+    @staticmethod
+    def _safe_float_convert(value):
+        """
+        Safely converts a value to float.
+
+        Args:
+            value: Value to convert
+
+        Returns:
+            float: Converted value or 0.0 if conversion fails
+        """
+        try:
+            result = float(value)
+            return result if not pd.isna(result) else 0.0
+        except (ValueError, TypeError):
+            return 0.0
