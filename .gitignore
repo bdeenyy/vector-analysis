@@ -1,23 +1,59 @@
-# Virtual environment
-venv/
-env/
-
-# Python
-__pycache__/
-*.py[cod]
-*.so
-*.egg
-*.egg-info/
-
-# IDE
+# IDE and Editor files
 .idea/
 .vscode/
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.vs/
+*.pydevproject
+*.project
+.settings/
+.classpath
+*.iml
+*.ipr
+*.iws
 
-# System
+# Python specific
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+.env/
+.venv/
+
+# Local development settings
+.env
+.env.local
+.env.*.local
+
+# Operating System
 .DS_Store
 Thumbs.db
-
-# Project specific
-*.xlsx
-*.xls
-*.log
+desktop.ini
