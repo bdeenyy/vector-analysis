@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f1e8bbff-43f2-4c1a-bd13-5f54078a02c1" name="Changes" comment="git add .github/workflows/build.yml&#10;git commit -m &quot;ci: add GitHub Actions workflow for Windows build&#10;&#10;- Add automated Windows executable build using PyInstaller&#10;- Configure GitHub Actions to create single executable file&#10;- Set up artifact upload for built application&#10;- Trigger builds on main branch pushes and pull requests&quot;&#10;git push">
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;bdeenyy&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/bdeenyy/vector-analysis.git&quot;,
+    &quot;accountId&quot;: &quot;68f440a9-e531-443e-92aa-6bd8f4e7e66d&quot;
+  }
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2oHtCHmNi7CxNnMDuI61uAc1Pag" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;
+  }
+}</component>
+  <component name="RunManager">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="vector-analysis" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-d7ad00fb9fc3-c546a90a8094-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-242.23726.102" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f1e8bbff-43f2-4c1a-bd13-5f54078a02c1" name="Changes" comment="" />
+      <created>1730538200465</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1730538200465</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Fix bugs excel_handler.py">
+      <option name="closed" value="true" />
+      <created>1730543764881</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1730543764881</updated>
+    </task>
+    <task id="LOCAL-00002" summary="feat: improve vector plot visualization and PDF export&#10;&#10;- Replace matplotlib-based VectorPlot with QGraphicsScene-based VectorPlotView&#10;- Implement proper scaling and aspect ratio for vector diagrams&#10;- Add grid layout (3 columns) with vertical scrolling&#10;- Fix diagram proportions and sizing issues&#10;- Improve PDF export functionality for both vector and deviation plots&#10;&#10;Technical changes:&#10;- Add new VectorPlotView class with QGraphicsScene for better rendering&#10;- Implement proper resize handling with aspect ratio preservation&#10;- Add improved error handling and memory management&#10;- Update main window to handle new plot view implementation&#10;- Add grid layout with proper spacing and margins&#10;- Optimize plot rendering performance&#10;&#10;File changes:&#10;+ src/views/vector_plot_view.py&#10;- src/views/vector_plot.py&#10;* src/views/main_window.py&#10;* src/utils/pdf_export_handler.py">
+      <option name="closed" value="true" />
+      <created>1730737080561</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1730737080561</updated>
+    </task>
+    <task id="LOCAL-00003" summary="feat: improve vector plot visualization and PDF export&#10;&#10;- Replace matplotlib-based VectorPlot with QGraphicsScene-based VectorPlotView&#10;- Implement proper scaling and aspect ratio for vector diagrams&#10;- Add grid layout (3 columns) with vertical scrolling&#10;- Fix diagram proportions and sizing issues&#10;- Improve PDF export functionality for both vector and deviation plots&#10;&#10;Technical changes:&#10;- Add new VectorPlotView class with QGraphicsScene for better rendering&#10;- Implement proper resize handling with aspect ratio preservation&#10;- Add improved error handling and memory management&#10;- Update main window to handle new plot view implementation&#10;- Add grid layout with proper spacing and margins&#10;- Optimize plot rendering performance&#10;&#10;File changes:&#10;+ src/views/vector_plot_view.py&#10;- src/views/vector_plot.py&#10;* src/views/main_window.py&#10;* src/utils/pdf_export_handler.py">
+      <option name="closed" value="true" />
+      <created>1730737423276</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1730737423276</updated>
+    </task>
+    <task id="LOCAL-00004" summary="feat: improve vector plot visualization and PDF export&#10;&#10;- Replace matplotlib-based VectorPlot with QGraphicsScene-based VectorPlotView&#10;- Remove obsolete vector_plot.py file">
+      <option name="closed" value="true" />
+      <created>1730737593978</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1730737593978</updated>
+    </task>
+    <task id="LOCAL-00005" summary="git add .github/workflows/build.yml&#10;git commit -m &quot;ci: add GitHub Actions workflow for Windows build&#10;&#10;- Add automated Windows executable build using PyInstaller&#10;- Configure GitHub Actions to create single executable file&#10;- Set up artifact upload for built application&#10;- Trigger builds on main branch pushes and pull requests&quot;&#10;git push">
+      <option name="closed" value="true" />
+      <created>1730738144699</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1730738144699</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Fix bugs excel_handler.py" />
+    <MESSAGE value="feat: improve vector plot visualization and PDF export&#10;&#10;- Replace matplotlib-based VectorPlot with QGraphicsScene-based VectorPlotView&#10;- Implement proper scaling and aspect ratio for vector diagrams&#10;- Add grid layout (3 columns) with vertical scrolling&#10;- Fix diagram proportions and sizing issues&#10;- Improve PDF export functionality for both vector and deviation plots&#10;&#10;Technical changes:&#10;- Add new VectorPlotView class with QGraphicsScene for better rendering&#10;- Implement proper resize handling with aspect ratio preservation&#10;- Add improved error handling and memory management&#10;- Update main window to handle new plot view implementation&#10;- Add grid layout with proper spacing and margins&#10;- Optimize plot rendering performance&#10;&#10;File changes:&#10;+ src/views/vector_plot_view.py&#10;- src/views/vector_plot.py&#10;* src/views/main_window.py&#10;* src/utils/pdf_export_handler.py" />
+    <MESSAGE value="feat: improve vector plot visualization and PDF export&#10;&#10;- Replace matplotlib-based VectorPlot with QGraphicsScene-based VectorPlotView&#10;- Remove obsolete vector_plot.py file" />
+    <MESSAGE value="git add .github/workflows/build.yml&#10;git commit -m &quot;ci: add GitHub Actions workflow for Windows build&#10;&#10;- Add automated Windows executable build using PyInstaller&#10;- Configure GitHub Actions to create single executable file&#10;- Set up artifact upload for built application&#10;- Trigger builds on main branch pushes and pull requests&quot;&#10;git push" />
+    <option name="LAST_COMMIT_MESSAGE" value="git add .github/workflows/build.yml&#10;git commit -m &quot;ci: add GitHub Actions workflow for Windows build&#10;&#10;- Add automated Windows executable build using PyInstaller&#10;- Configure GitHub Actions to create single executable file&#10;- Set up artifact upload for built application&#10;- Trigger builds on main branch pushes and pull requests&quot;&#10;git push" />
+  </component>
+</project>
