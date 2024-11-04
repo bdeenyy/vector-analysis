@@ -4,14 +4,15 @@ from PyQt6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QTableWidget,
     QTableWidgetItem, QPushButton, QRadioButton, QLabel, QLineEdit,
     QTabWidget, QButtonGroup, QMessageBox, QApplication, QGridLayout,
-    QScrollArea
+    QScrollArea, QSizePolicy
 )
 from PyQt6.QtGui import QDoubleValidator
-from PyQt6.QtCore import pyqtSlot
+from PyQt6.QtCore import pyqtSlot, Qt
 from src.models.vector_data import VectorData
 from src.views.VerticalDeviationPlot import VerticalDeviationPlot
-from src.views.vector_plot import VectorPlot
+from src.views.vector_plot_view import VectorPlotView  # Обновленный импорт
 from src.utils.excel_handler import ExcelHandler
+from src.utils.pdf_export_handler import PDFExportHandler
 
 
 @dataclass
@@ -218,14 +219,38 @@ class MainWindow(QMainWindow):
             layout.addWidget(button)
 
     def setup_vector_tab(self) -> None:
-        """Setup vector visualization tab"""
+        """Setup vector visualization tab with improved layout"""
         layout = QVBoxLayout()
-        self.vector_container = QWidget()
-        self.vector_container.setLayout(QGridLayout())
 
+        # Control panel
+        control_panel = QHBoxLayout()
+
+        # Export button
+        self.export_pdf_btn = QPushButton("Экспорт в PDF")
+        self.export_pdf_btn.clicked.connect(self.export_to_pdf)
+
+        # Add controls to panel
+        control_panel.addWidget(self.export_pdf_btn)
+        control_panel.addStretch()
+        layout.addLayout(control_panel)
+
+        # Scroll area for vector plots
         scroll = QScrollArea()
-        scroll.setWidget(self.vector_container)
         scroll.setWidgetResizable(True)
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+
+        # Container for plots
+        self.vector_container = QWidget()
+        grid = QGridLayout(self.vector_container)
+        grid.setSpacing(20)  # Увеличенный отступ между графиками
+        grid.setContentsMargins(20, 20, 20, 20)  # Отступы от краев
+
+        # Установка фиксированной ширины контейнера
+        screen_width = QApplication.primaryScreen().availableGeometry().width()
+        container_width = min(screen_width - 100, 1200)
+        self.vector_container.setFixedWidth(container_width)
+
+        scroll.setWidget(self.vector_container)
         layout.addWidget(scroll)
 
         self.vector_tab.setLayout(layout)
@@ -234,9 +259,33 @@ class MainWindow(QMainWindow):
         """Setup deviation visualization tab"""
         layout = QVBoxLayout()
 
-        controls = self._create_deviation_controls()
+        # Верхняя панель с контролями
+        controls = QHBoxLayout()
+
+        # Левая часть с настройкой допуска
+        tolerance_layout = QHBoxLayout()
+        self.tolerance_label = QLabel("Допустимое отклонение (мм/м):")
+        self.tolerance_input = QLineEdit(UIConfig.DEFAULT_TOLERANCE)
+        self.tolerance_input.setValidator(QDoubleValidator(0.0, 100.0, 2))
+        tolerance_layout.addWidget(self.tolerance_label)
+        tolerance_layout.addWidget(self.tolerance_input)
+        controls.addLayout(tolerance_layout)
+
+        # Кнопки
+        button_layout = QHBoxLayout()
+        self.update_deviation_btn = QPushButton("Обновить графики")
+        self.update_deviation_btn.clicked.connect(self.update_deviation_plots)
+        self.export_deviation_pdf_btn = QPushButton("Экспорт в PDF")
+        self.export_deviation_pdf_btn.clicked.connect(self.export_deviations_to_pdf)
+
+        button_layout.addWidget(self.update_deviation_btn)
+        button_layout.addWidget(self.export_deviation_pdf_btn)
+        controls.addLayout(button_layout)
+
+        controls.addStretch()
         layout.addLayout(controls)
 
+        # Контейнер для графиков
         self.deviation_container = QWidget()
         self.deviation_container.setLayout(QHBoxLayout())
 
@@ -289,13 +338,79 @@ class MainWindow(QMainWindow):
 
     def update_vector_plots(self, data: List[VectorData], azimuth: float,
                             is_clockwise: bool) -> None:
-        """Update vector diagram plots"""
+        """Update vector plots with improved sizing and layout"""
         self._clear_container(self.vector_container)
+        layout = self.vector_container.layout()
+
+        # Calculate plot size
+        container_width = self.vector_container.width()
+        spacing = layout.spacing()
+        margins = layout.contentsMargins()
+        available_width = (container_width - margins.left() - margins.right()
+                           - 2 * spacing)
+        plot_size = available_width // 3
 
         for i, vector_data in enumerate(data):
-            plot = VectorPlot(self)
+            # Create plot container
+            plot_container = QWidget()
+            plot_layout = QVBoxLayout(plot_container)
+            plot_layout.setContentsMargins(0, 0, 0, 0)
+
+            # Create and setup plot using VectorPlotView
+            plot = VectorPlotView(self)
+            plot.setFixedSize(plot_size, plot_size)
             plot.plot_vector_diagram(vector_data, azimuth, is_clockwise)
-            self.vector_container.layout().addWidget(plot, i // 3, i % 3)
+
+            # Add plot to container
+            plot_layout.addWidget(plot)
+
+            # Add to grid
+            row = i // 3
+            col = i % 3
+            layout.addWidget(plot_container, row, col,
+                             Qt.AlignmentFlag.AlignCenter)
+
+        # Add stretch to last row
+        layout.setRowStretch(layout.rowCount(), 1)
+
+    def export_deviations_to_pdf(self) -> None:
+        """Export deviation plots to PDF"""
+        if not hasattr(self, '_pdf_handler'):
+            from src.utils.pdf_export_handler import PDFExportHandler
+            self._pdf_handler = PDFExportHandler(self)
+
+        if self._pdf_handler.export_deviations_to_pdf():
+            QMessageBox.information(
+                self,
+                "Успех",
+                "Экспорт графиков отклонений в PDF выполнен успешно"
+            )
+
+    def export_to_pdf(self) -> None:
+        """Export vector plots to PDF"""
+        if not hasattr(self, '_pdf_handler'):
+            from src.utils.pdf_export_handler import PDFExportHandler
+            self._pdf_handler = PDFExportHandler(self)
+
+        if self._pdf_handler.export_vectors_to_pdf():
+            QMessageBox.information(
+                self,
+                "Успех",
+                "Экспорт векторных диаграмм в PDF выполнен успешно"
+            )
+
+    def export_to_pdf(self) -> None:
+        """Export vector plots to PDF"""
+        if not hasattr(self, '_pdf_handler'):
+            from src.utils.pdf_export_handler import PDFExportHandler
+            self._pdf_handler = PDFExportHandler(self)
+
+        if self._pdf_handler.export_vectors_to_pdf():
+            QMessageBox.information(
+                self,
+                "Успех",
+                "Экспорт векторных диаграмм в PDF выполнен успешно"
+            )
 
     def update_deviation_plots(self) -> None:
         """Update deviation plots"""
@@ -315,13 +430,15 @@ class MainWindow(QMainWindow):
         except ValueError as e:
             QMessageBox.warning(self, "Ошибка", str(e))
 
-    @staticmethod
-    def _clear_container(container: QWidget) -> None:
-        """Clear all widgets from container"""
-        while container.layout().count():
-            item = container.layout().takeAt(0)
-            if item.widget():
-                item.widget().deleteLater()
+    def _clear_container(self, container: QWidget) -> None:
+        """Clear container with proper cleanup"""
+        if container and container.layout():
+            while container.layout().count():
+                item = container.layout().takeAt(0)
+                if item.widget():
+                    widget = item.widget()
+                    widget.setParent(None)
+                    widget.deleteLater()
 
     def load_excel(self):
         """Load data from Excel file"""

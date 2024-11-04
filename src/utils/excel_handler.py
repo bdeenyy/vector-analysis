@@ -7,15 +7,15 @@ class ExcelHandler:
     @staticmethod
     def load_from_excel():
         """
-        Opens a file dialog for Excel file selection and loads vector data.
-        Takes first 4 columns starting from second row.
+        Открывает диалоговое окно для выбора Excel файла и загружает векторные данные.
+        Берет первые 4 колонки, начиная со второй строки.
 
-        Returns:
-            list: List of VectorData objects containing the loaded data.
-                 Returns empty list if loading fails or user cancels.
+        Возвращает:
+            list: Список объектов VectorData, содержащий загруженные данные.
+                  Возвращает пустой список, если загрузка не удалась или пользователь отменил.
         """
         try:
-            # Open file dialog
+            # Открытие диалогового окна для выбора файла
             file_name, _ = QFileDialog.getOpenFileName(
                 None,
                 "Выберите Excel файл",
@@ -26,14 +26,14 @@ class ExcelHandler:
             if not file_name:
                 return []
 
-            # Read Excel file, skip first row
+            # Чтение Excel файла, пропуская первую строку
             df = pd.read_excel(file_name, skiprows=1)
 
-            # Process data
+            # Обработка данных
             vector_data_list = []
             for index, row in df.iterrows():
                 try:
-                    # Take only first 4 columns
+                    # Берем только первые 4 колонки
                     values = row.values[:4]
                     if len(values) < 4:
                         continue
@@ -47,7 +47,7 @@ class ExcelHandler:
                     vector_data_list.append(vector_data)
 
                 except Exception as e:
-                    print(f"Error in row {index + 2}: {str(e)}")
+                    print(f"Ошибка в строке {index + 2}: {str(e)}")
                     continue
 
             if not vector_data_list:
@@ -71,11 +71,11 @@ class ExcelHandler:
     @staticmethod
     def save_to_excel(vector_data_list, file_path):
         """
-        Saves vector data to an Excel file.
+        Сохраняет векторные данные в Excel файл.
 
-        Args:
-            vector_data_list (list): List of VectorData objects to save
-            file_path (str): Path where to save the Excel file
+        Аргументы:
+            vector_data_list (list): Список объектов VectorData для сохранения
+            file_path (str): Путь, по которому сохраняется Excel файл
         """
         try:
             data = []
@@ -100,13 +100,13 @@ class ExcelHandler:
     @staticmethod
     def _safe_float_convert(value):
         """
-        Safely converts a value to float.
+        Безопасно преобразует значение в float.
 
-        Args:
-            value: Value to convert
+        Аргументы:
+            value: Значение для преобразования
 
-        Returns:
-            float: Converted value or 0.0 if conversion fails
+        Возвращает:
+            float: Преобразованное значение или 0.0, если преобразование не удалось
         """
         try:
             result = float(value)

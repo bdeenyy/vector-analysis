@@ -6,12 +6,27 @@ from matplotlib.patches import Polygon
 
 
 class VectorPlot(FigureCanvasQTAgg):
-    def __init__(self, parent=None, width=8, height=6):
-        self.fig = Figure(figsize=(width, height))
+    def __init__(self, parent=None, width=6, height=6):
+        # Создаем фигуру с заданными размерами
+        self.fig = Figure(figsize=(width, height), dpi=100)
+        # Добавляем оси с правильными отступами
         self.axes = self.fig.add_subplot(111)
         super().__init__(self.fig)
         self.setParent(parent)
         self.triangle = None
+
+        # Устанавливаем минимальные размеры
+        self.setMinimumSize(200, 200)
+
+        # Настраиваем параметры фигуры
+        self.fig.set_tight_layout(True)
+
+    def resizeEvent(self, event):
+        """Handle resize event"""
+        super().resizeEvent(event)
+        self.fig.set_size_inches(event.size().width() / self.fig.dpi,
+                                 event.size().height() / self.fig.dpi)
+        self.draw()
 
     def plot_vector_diagram(self, vector_data, azimuth, is_clockwise):
         if self.triangle is None:  # Draw triangle only once
@@ -124,4 +139,5 @@ class VectorPlot(FigureCanvasQTAgg):
         self.axes.set_xlim(-1.5, 1.5)
         self.axes.set_ylim(-1.5, 1.5)
         self.axes.axis('off')
-        self.fig.tight_layout()
+        # Используем tight_layout для автоматической настройки отступов
+        self.fig.tight_layout(pad=0.5)

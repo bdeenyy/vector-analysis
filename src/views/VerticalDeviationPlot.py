@@ -34,8 +34,12 @@ class VerticalDeviationPlot(FigureCanvasQTAgg):
             deviations = [data.length3 for data in data_list]
             title = "Отклонения ОП3"
 
+        # Добавляем начальную точку (0,0)
+        heights.insert(0, 0)
+        deviations.insert(0, 0)
+
         # Calculate tolerance lines
-        min_height = min(heights)
+        min_height = 0  # Начинаем с нуля
         max_height = max(heights)
         height_range = np.array([min_height, max_height])
         tolerance_lines = height_range * tolerance_mm_per_m
