@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f1e8bbff-43f2-4c1a-bd13-5f54078a02c1" name="Changes" comment="git add .github/workflows/build.yml&#10;git commit -m &quot;ci: add GitHub Actions workflow for Windows build&#10;&#10;- Add automated Windows executable build using PyInstaller&#10;- Configure GitHub Actions to create single executable file&#10;- Set up artifact upload for built application&#10;- Trigger builds on main branch pushes and pull requests&quot;&#10;git push">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="f1e8bbff-43f2-4c1a-bd13-5f54078a02c1" name="Changes" comment="- Add directory structure check step&#10;- Update PyInstaller path to src/main.py&#10;- Keep all other build settings unchanged&quot;">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/build.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/build.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -142,7 +138,15 @@
       <option name="project" value="LOCAL" />
       <updated>1730738144699</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="- Add directory structure check step&#10;- Update PyInstaller path to src/main.py&#10;- Keep all other build settings unchanged&quot;">
+      <option name="closed" value="true" />
+      <created>1730738435938</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1730738435938</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -150,6 +154,7 @@
     <MESSAGE value="feat: improve vector plot visualization and PDF export&#10;&#10;- Replace matplotlib-based VectorPlot with QGraphicsScene-based VectorPlotView&#10;- Implement proper scaling and aspect ratio for vector diagrams&#10;- Add grid layout (3 columns) with vertical scrolling&#10;- Fix diagram proportions and sizing issues&#10;- Improve PDF export functionality for both vector and deviation plots&#10;&#10;Technical changes:&#10;- Add new VectorPlotView class with QGraphicsScene for better rendering&#10;- Implement proper resize handling with aspect ratio preservation&#10;- Add improved error handling and memory management&#10;- Update main window to handle new plot view implementation&#10;- Add grid layout with proper spacing and margins&#10;- Optimize plot rendering performance&#10;&#10;File changes:&#10;+ src/views/vector_plot_view.py&#10;- src/views/vector_plot.py&#10;* src/views/main_window.py&#10;* src/utils/pdf_export_handler.py" />
     <MESSAGE value="feat: improve vector plot visualization and PDF export&#10;&#10;- Replace matplotlib-based VectorPlot with QGraphicsScene-based VectorPlotView&#10;- Remove obsolete vector_plot.py file" />
     <MESSAGE value="git add .github/workflows/build.yml&#10;git commit -m &quot;ci: add GitHub Actions workflow for Windows build&#10;&#10;- Add automated Windows executable build using PyInstaller&#10;- Configure GitHub Actions to create single executable file&#10;- Set up artifact upload for built application&#10;- Trigger builds on main branch pushes and pull requests&quot;&#10;git push" />
-    <option name="LAST_COMMIT_MESSAGE" value="git add .github/workflows/build.yml&#10;git commit -m &quot;ci: add GitHub Actions workflow for Windows build&#10;&#10;- Add automated Windows executable build using PyInstaller&#10;- Configure GitHub Actions to create single executable file&#10;- Set up artifact upload for built application&#10;- Trigger builds on main branch pushes and pull requests&quot;&#10;git push" />
+    <MESSAGE value="- Add directory structure check step&#10;- Update PyInstaller path to src/main.py&#10;- Keep all other build settings unchanged&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Add directory structure check step&#10;- Update PyInstaller path to src/main.py&#10;- Keep all other build settings unchanged&quot;" />
   </component>
 </project>
