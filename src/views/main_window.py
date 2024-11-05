@@ -23,7 +23,7 @@ class MainWindow(QMainWindow):
     Управляет всеми компонентами и их взаимодействием.
     """
 
-    def __init__(self):
+    def __init__(self):  # Убрали параметр app_manager
         super().__init__()
         self._init_dependencies()
         self.setup_font()
@@ -259,6 +259,8 @@ class MainWindow(QMainWindow):
                 "Успех",
                 "Экспорт графиков отклонений в PDF выполнен успешно"
             )
+            # Обновляем графики после экспорта
+            self.update_deviation_plots()
 
     # ---- Вспомогательные методы ----
     def _update_plots(self, data, direction_values):
@@ -298,7 +300,9 @@ class MainWindow(QMainWindow):
             if not data:
                 return
 
+            # Получаем текущее значение tolerance
             tolerance = float(self.tolerance_input.text())
+
             self._clear_container(self.deviation_container)
 
             for i in range(3):
