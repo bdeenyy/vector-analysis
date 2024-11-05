@@ -45,7 +45,7 @@ class MainWindow(QMainWindow):
                 font_id = QFontDatabase.addApplicationFont(font_path)
                 if font_id != -1:
                     # Увеличенный размер шрифта для интерфейса
-                    self.custom_font = QFont("ISOCPEUR", 20)  # Увеличили с 10 до 20
+                    self.custom_font = QFont("ISOCPEUR", 14)  # Увеличили шрифт
                     self.custom_font.setItalic(True)
                     QApplication.setFont(self.custom_font)
 
@@ -308,3 +308,16 @@ class MainWindow(QMainWindow):
 
         except ValueError as e:
             QMessageBox.warning(self, "Ошибка", str(e))
+
+    def closeEvent(self, event):
+        """Обработка закрытия окна"""
+        try:
+            # Очищаем временные файлы matplotlib
+            import matplotlib.pyplot as plt
+            plt.close('all')
+
+            # Принимаем событие закрытия
+            event.accept()
+        except Exception as e:
+            print(f"Error during cleanup: {e}")
+            event.accept()

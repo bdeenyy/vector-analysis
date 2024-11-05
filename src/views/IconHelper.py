@@ -3,7 +3,7 @@ from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import QSize
 
 # Размер иконок по умолчанию
-ICON_SIZE = QSize(16, 16)
+ICON_SIZE = QSize(20, 20)
 
 # Карта соответствия имен иконок и файлов
 ICON_MAP = {
