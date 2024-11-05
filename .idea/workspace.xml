@@ -4,9 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f1e8bbff-43f2-4c1a-bd13-5f54078a02c1" name="Changes" comment="- Update checkout action to v4&#10;- Update setup-python action to v5&#10;- Update upload-artifact action to v4&#10;- Remove deprecated Node.js warnings&quot;">
+    <list default="true" id="f1e8bbff-43f2-4c1a-bd13-5f54078a02c1" name="Changes" comment="- Update vector plot figure reference from fig to figure&#10;- Keep deviation plot fig reference unchanged&#10;- Fix PDF export for vector triangles&quot;&#10;- Set application icon in main window&quot;">
+      <change afterPath="$PROJECT_DIR$/src/components/custom_table.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/styled_widgets.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/IconHelper.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/control_panel.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/data_panel.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/excel_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/excel_handler.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/utils/pdf_export_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/pdf_export_handler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/main_window.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/main_window.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,6 +61,11 @@
     &quot;git-widget-placeholder&quot;: &quot;main&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/views" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="vector-analysis" />
@@ -155,7 +167,15 @@
       <option name="project" value="LOCAL" />
       <updated>1730739128845</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="- Update vector plot figure reference from fig to figure&#10;- Keep deviation plot fig reference unchanged&#10;- Fix PDF export for vector triangles&quot;&#10;- Set application icon in main window&quot;">
+      <option name="closed" value="true" />
+      <created>1730740924356</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1730740924356</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -165,6 +185,7 @@
     <MESSAGE value="git add .github/workflows/build.yml&#10;git commit -m &quot;ci: add GitHub Actions workflow for Windows build&#10;&#10;- Add automated Windows executable build using PyInstaller&#10;- Configure GitHub Actions to create single executable file&#10;- Set up artifact upload for built application&#10;- Trigger builds on main branch pushes and pull requests&quot;&#10;git push" />
     <MESSAGE value="- Add directory structure check step&#10;- Update PyInstaller path to src/main.py&#10;- Keep all other build settings unchanged&quot;" />
     <MESSAGE value="- Update checkout action to v4&#10;- Update setup-python action to v5&#10;- Update upload-artifact action to v4&#10;- Remove deprecated Node.js warnings&quot;" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Update checkout action to v4&#10;- Update setup-python action to v5&#10;- Update upload-artifact action to v4&#10;- Remove deprecated Node.js warnings&quot;" />
+    <MESSAGE value="- Update vector plot figure reference from fig to figure&#10;- Keep deviation plot fig reference unchanged&#10;- Fix PDF export for vector triangles&quot;&#10;- Set application icon in main window&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Update vector plot figure reference from fig to figure&#10;- Keep deviation plot fig reference unchanged&#10;- Fix PDF export for vector triangles&quot;&#10;- Set application icon in main window&quot;" />
   </component>
 </project>

@@ -1,3 +1,4 @@
+# src/utils/excel_handler.py
 from PyQt6.QtWidgets import QFileDialog, QMessageBox
 import pandas as pd
 from src.models.vector_data import VectorData
@@ -8,46 +9,75 @@ class ExcelHandler:
     def load_from_excel():
         """
         Открывает диалоговое окно для выбора Excel файла и загружает векторные данные.
-        Берет первые 4 колонки, начиная со второй строки.
-
-        Возвращает:
-            list: Список объектов VectorData, содержащий загруженные данные.
-                  Возвращает пустой список, если загрузка не удалась или пользователь отменил.
         """
         try:
-            # Открытие диалогового окна для выбора файла
-            file_name, _ = QFileDialog.getOpenFileName(
-                None,
-                "Выберите Excel файл",
-                "",
-                "Excel Files (*.xlsx *.xls)"
-            )
+            dialog = QFileDialog(None)
+            dialog.setWindowTitle("Выберите Excel файл")
+            dialog.setNameFilter("Excel Files (*.xlsx *.xls)")
+            dialog.setFileMode(QFileDialog.FileMode.ExistingFile)
+            dialog.setAcceptMode(QFileDialog.AcceptMode.AcceptOpen)
+            dialog.setViewMode(QFileDialog.ViewMode.Detail)
 
-            if not file_name:
+            if dialog.exec() == QFileDialog.DialogCode.Accepted:
+                file_name = dialog.selectedFiles()[0]
+            else:
                 return []
 
-            # Чтение Excel файла, пропуская первую строку
-            df = pd.read_excel(file_name, skiprows=1)
+            print(f"Selected file: {file_name}")  # Для отладки
+
+            # Чтение Excel файла
+            df = pd.read_excel(
+                file_name,
+                engine='openpyxl'  # Явно указываем движок для xlsx
+            )
+
+            # Проверяем наличие данных
+            if df.empty:
+                QMessageBox.warning(None, "Предупреждение", "Excel файл пуст")
+                return []
+
+            # Проверяем количество столбцов
+            if len(df.columns) < 4:
+                QMessageBox.warning(None, "Предупреждение",
+                                    "Excel файл должен содержать минимум 4 столбца:\n"
+                                    "Сечение, ОП1, ОП2, ОП3")
+                return []
 
             # Обработка данных
             vector_data_list = []
+
+            # Используем только первые 4 столбца
+            df = df.iloc[:, :4]
+
             for index, row in df.iterrows():
                 try:
-                    # Берем только первые 4 колонки
-                    values = row.values[:4]
-                    if len(values) < 4:
-                        continue
+                    # Преобразуем значения
+                    name = str(row.iloc[0]) if not pd.isna(row.iloc[0]) else ""
 
-                    vector_data = VectorData(
-                        name=str(values[0]),
-                        length1=ExcelHandler._safe_float_convert(values[1]),
-                        length2=ExcelHandler._safe_float_convert(values[2]),
-                        length3=ExcelHandler._safe_float_convert(values[3])
-                    )
-                    vector_data_list.append(vector_data)
+                    # Получаем числовые значения
+                    lengths = []
+                    for i in range(1, 4):
+                        value = row.iloc[i]
+                        if pd.isna(value):
+                            lengths.append(0.0)
+                        else:
+                            try:
+                                lengths.append(float(value))
+                            except (ValueError, TypeError):
+                                lengths.append(0.0)
+
+                    # Пропускаем строки, где все значения нулевые и имя пустое
+                    if any(lengths) or name.strip():
+                        vector_data = VectorData(
+                            name=name,
+                            length1=lengths[0],
+                            length2=lengths[1],
+                            length3=lengths[2]
+                        )
+                        vector_data_list.append(vector_data)
 
                 except Exception as e:
-                    print(f"Ошибка в строке {index + 2}: {str(e)}")
+                    print(f"Ошибка в строке {index + 1}: {str(e)}")
                     continue
 
             if not vector_data_list:
@@ -58,24 +88,38 @@ class ExcelHandler:
                 )
                 return []
 
+            print(f"Loaded {len(vector_data_list)} records")  # Для отладки
             return vector_data_list
 
         except pd.errors.EmptyDataError:
             QMessageBox.critical(None, "Ошибка", "Excel файл пуст")
             return []
-
         except Exception as e:
-            QMessageBox.critical(None, "Ошибка", f"Ошибка при загрузке файла: {str(e)}")
+            QMessageBox.critical(
+                None,
+                "Ошибка",
+                f"Ошибка при загрузке файла: {str(e)}\n"
+                f"Убедитесь, что файл имеет формат .xlsx или .xls"
+            )
             return []
+
+    @staticmethod
+    def _safe_float_convert(value):
+        """
+        Безопасно преобразует значение в float.
+        """
+        try:
+            if pd.isna(value):
+                return 0.0
+            result = float(value)
+            return result if not pd.isna(result) else 0.0
+        except (ValueError, TypeError):
+            return 0.0
 
     @staticmethod
     def save_to_excel(vector_data_list, file_path):
         """
         Сохраняет векторные данные в Excel файл.
-
-        Аргументы:
-            vector_data_list (list): Список объектов VectorData для сохранения
-            file_path (str): Путь, по которому сохраняется Excel файл
         """
         try:
             data = []
@@ -88,7 +132,7 @@ class ExcelHandler:
                 })
 
             df = pd.DataFrame(data)
-            df.to_excel(file_path, index=False)
+            df.to_excel(file_path, index=False, engine='openpyxl')
 
         except Exception as e:
             QMessageBox.critical(
@@ -96,20 +140,3 @@ class ExcelHandler:
                 "Ошибка",
                 f"Ошибка при сохранении файла: {str(e)}"
             )
-
-    @staticmethod
-    def _safe_float_convert(value):
-        """
-        Безопасно преобразует значение в float.
-
-        Аргументы:
-            value: Значение для преобразования
-
-        Возвращает:
-            float: Преобразованное значение или 0.0, если преобразование не удалось
-        """
-        try:
-            result = float(value)
-            return result if not pd.isna(result) else 0.0
-        except (ValueError, TypeError):
-            return 0.0

@@ -18,19 +18,56 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: '3.10'
+        cache: 'pip'  # Включаем кэширование pip
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
+        # Устанавливаем все зависимости включая dev пакеты
         pip install -r requirements.txt
+        pip install -r requirements-dev.txt
         pip install pyinstaller
 
     - name: Build with PyInstaller
       run: |
-        pyinstaller --name VectorAnalyzer --onefile --windowed --icon=src/resources/icon.ico --add-data "src;src" src/main.py
+        pyinstaller --name VectorAnalyzer `
+          --onefile `
+          --windowed `
+          --icon=src/resources/icon.ico `
+          --add-data "src/resources;src/resources" `
+          --hidden-import="numpy" `
+          --hidden-import="matplotlib" `
+          --hidden-import="pandas" `
+          --hidden-import="PyQt6" `
+          --hidden-import="openpyxl" `
+          --collect-data matplotlib `
+          --collect-data PyQt6 `
+          src/main.py
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ github.run_number }}
+        release_name: Release v${{ github.run_number }}
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./dist/VectorAnalyzer.exe
+        asset_name: VectorAnalyzer.exe
+        asset_content_type: application/octet-stream
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: VectorAnalyzer-Windows
         path: dist/VectorAnalyzer.exe
+        retention-days: 90  # Храним артефакт 90 дней

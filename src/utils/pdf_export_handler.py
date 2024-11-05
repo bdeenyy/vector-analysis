@@ -10,6 +10,27 @@ class PDFExportHandler:
     def __init__(self, main_window):
         self.main_window = main_window
 
+    def _get_save_filename(self, default_name="export.pdf"):
+        """Get save filename from dialog"""
+        dialog = QFileDialog(self.main_window)
+        dialog.setWindowTitle("Сохранить PDF")
+        dialog.setNameFilter("PDF Files (*.pdf)")
+        dialog.setDefaultSuffix("pdf")
+        dialog.setAcceptMode(QFileDialog.AcceptMode.AcceptSave)
+        dialog.setFileMode(QFileDialog.FileMode.AnyFile)
+        dialog.setViewMode(QFileDialog.ViewMode.Detail)
+
+        # Установка начального имени файла
+        dialog.selectFile(default_name)
+
+        if dialog.exec() == QFileDialog.DialogCode.Accepted:
+            file_name = dialog.selectedFiles()[0]
+            if not file_name.lower().endswith('.pdf'):
+                file_name += '.pdf'
+            return file_name
+        return None
+
+
     def _setup_printer(self, file_name):
         """Setup printer with common settings"""
         printer = QPrinter(QPrinter.PrinterMode.HighResolution)
@@ -23,20 +44,6 @@ class PDFExportHandler:
 
         return printer
 
-    def _get_save_filename(self, default_name="export.pdf"):
-        """Get save filename from dialog"""
-        file_name, _ = QFileDialog.getSaveFileName(
-            parent=self.main_window,
-            caption="Сохранить PDF",
-            directory=os.path.join(os.path.expanduser("~"), default_name),
-            filter="PDF Files (*.pdf)",
-            initialFilter="PDF Files (*.pdf)"
-        )
-
-        if file_name and not file_name.lower().endswith('.pdf'):
-            file_name += '.pdf'
-
-        return file_name
 
     def export_vectors_to_pdf(self):
         """Export vector plots to PDF file"""
@@ -63,12 +70,15 @@ class PDFExportHandler:
             painter = QPainter()
             painter.begin(printer)
 
+            # Получаем все графики из контейнера
             vector_plots = []
-            for i in range(self.main_window.vector_container.layout().count()):
-                widget = self.main_window.vector_container.layout().itemAt(i).widget()
-                if widget:
-                    plot_container = widget.layout().itemAt(0).widget()
-                    vector_plots.append(plot_container)
+            layout = self.main_window.vector_container.layout()
+            for i in range(layout.count()):
+                item = layout.itemAt(i)
+                if item and item.widget():
+                    # VectorPlotView содержит сцену с графиком
+                    plot = item.widget()
+                    vector_plots.append(plot)
 
             for i, plot in enumerate(vector_plots):
                 plot_index_on_page = i % plots_per_page
@@ -82,9 +92,10 @@ class PDFExportHandler:
                 y = margin + row * (plot_height + margin)
                 plot_rect = QRectF(x, y, plot_width, plot_height)
 
-                # Save plot to temporary file
+                # Сохраняем график во временный файл
                 temp_path = os.path.join(tempfile.gettempdir(), f'plot_{i}.png')
-                plot.figure.savefig(temp_path, bbox_inches='tight', dpi=300)
+                # Используем figure из matplotlib canvas
+                plot.canvas.figure.savefig(temp_path, bbox_inches='tight', dpi=300)
 
                 image = QImage(temp_path)
                 scaled_image = image.scaled(
@@ -92,8 +103,19 @@ class PDFExportHandler:
                     int(plot_height),
                     aspectRatioMode=Qt.AspectRatioMode.KeepAspectRatio
                 )
-                painter.drawImage(plot_rect, scaled_image)
 
+                # Центрируем изображение
+                x_offset = (plot_width - scaled_image.width()) / 2 if scaled_image.width() < plot_width else 0
+                y_offset = (plot_height - scaled_image.height()) / 2 if scaled_image.height() < plot_height else 0
+
+                draw_rect = QRectF(
+                    plot_rect.x() + x_offset,
+                    plot_rect.y() + y_offset,
+                    scaled_image.width(),
+                    scaled_image.height()
+                )
+
+                painter.drawImage(draw_rect, scaled_image)
                 os.remove(temp_path)
 
             painter.end()
@@ -136,9 +158,10 @@ class PDFExportHandler:
                 y = margin
                 plot_rect = QRectF(x, y, plot_width, plot_height)
 
+                # Сохраняем во временный файл
                 temp_path = os.path.join(tempfile.gettempdir(), f'dev_plot_{i}.png')
-                plot.fig.set_size_inches(8, 12)
-                plot.fig.savefig(temp_path, bbox_inches='tight', dpi=300)
+                plot.figure.set_size_inches(8, 12)
+                plot.figure.savefig(temp_path, bbox_inches='tight', dpi=300)
 
                 image = QImage(temp_path)
                 scaled_image = image.scaled(
@@ -147,6 +170,7 @@ class PDFExportHandler:
                     aspectRatioMode=Qt.AspectRatioMode.KeepAspectRatio
                 )
 
+                # Центрирование изображения в прямоугольнике
                 x_offset = (plot_width - scaled_image.width()) / 2 if scaled_image.width() < plot_width else 0
                 y_offset = (plot_height - scaled_image.height()) / 2 if scaled_image.height() < plot_height else 0
 
@@ -159,6 +183,7 @@ class PDFExportHandler:
 
                 painter.drawImage(draw_rect, scaled_image)
 
+                # Удаляем временный файл
                 os.remove(temp_path)
 
             painter.end()
