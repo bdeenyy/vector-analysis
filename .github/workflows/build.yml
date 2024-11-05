@@ -51,7 +51,6 @@ jobs:
           --hidden-import="openpyxl" `
           --collect-data matplotlib `
           --collect-data PyQt6 `
-          --runtime-hook "src/hooks/runtime_hook.py" `
           src/main.py
 
     - name: Create Release and Upload Asset
