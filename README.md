@@ -23,7 +23,7 @@
 
 1. Клонировать репозиторий:
 ```bash
-git clone https://github.com/your-username/vector-analysis.git
+git clone https://github.com/bdeenyy/vector-analysis.git
 cd vector-analysis
 ```
 
